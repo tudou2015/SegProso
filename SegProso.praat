@@ -2,7 +2,7 @@
 
 #  SegProso                                           		
 #  AUTHOR: Juan María Garrido Almiñana			
-#  VERSION: 2.0 (14/10/2017)						
+#  VERSION: 2.1 (26/02/2018)						
 # Script to add prosodic segmentation to a TextGrid file. 
 
 # The script needs as input:
