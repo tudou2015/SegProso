@@ -92,20 +92,48 @@ if fileReadable (nombre_completo_fichero_entrada$)
 
 		printline Processing 'nombre_completo_fichero_textgrid$'...
 
+
 		Read from file... 'nombre_completo_fichero_textgrid$'
 		textgrid = selected ("TextGrid")
+
+		if transcripcion$ = "SAMPA"
+
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 """a" "a_&quot" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 """e" "e_&quot" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 """i" "i_&quot" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 """o" "o_&quot" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 """u" "u_&quot" Literals
+
+		endif
+
+		num_tiers = Get number of tiers
+
 
 		#printline Creamos un tier con las silabas para el fichero 'nombre_completo_fichero_textgrid$'. 
 		call crea_tier_silabas sound textgrid tier_transcripcion_fonetica tier_transcripcion_ortografica 'transcripcion$'
 
 		#printline Creamos un tier con los grupos fonicos para el fichero 'nombre_completo_fichero_textgrid$'. 
-		call crea_tier_grupos_fonicos sound textgrid tier_transcripcion_fonetica+1
+		#call crea_tier_grupos_fonicos sound textgrid tier_transcripcion_fonetica+1
+		call crea_tier_grupos_fonicos sound textgrid num_tiers+1
 
 		#printline Creamos un tier con los grupos entonativos para el fichero 'nombre_completo_fichero_textgrid$'. 
-		call crea_tier_grupos_entonativos sound textgrid tier_transcripcion_ortografica tier_transcripcion_fonetica tier_transcripcion_fonetica+1
+		#call crea_tier_grupos_entonativos sound textgrid tier_transcripcion_ortografica tier_transcripcion_fonetica tier_transcripcion_fonetica+1
+		call crea_tier_grupos_entonativos sound textgrid tier_transcripcion_ortografica tier_transcripcion_fonetica num_tiers+1
 
 		#printline Creamos un tier con los grupos acentuales para el fichero 'nombre_completo_fichero_textgrid$'. 
-		call crea_tier_grupos_acentuales sound textgrid tier_transcripcion_fonetica+1 tier_transcripcion_fonetica+2
+		#call crea_tier_grupos_acentuales sound textgrid tier_transcripcion_fonetica+1 tier_transcripcion_fonetica+2
+		call crea_tier_grupos_acentuales sound textgrid num_tiers+1 num_tiers+2
+
+
+		if transcripcion$ = "SAMPA"
+
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 "a_&quot" """a" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 "e_&quot" """e" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 "i_&quot" """i" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 "o_&quot" """o" Literals
+			Replace interval text... 'tier_transcripcion_fonetica' 0 0 "u_&quot" """u" Literals
+
+		endif
 
 		# Guardamos la salida en un fichero
 
@@ -135,8 +163,11 @@ procedure crea_tier_silabas sound textgrid tier_transcripcion_fonetica tier_tran
 		tier_transcription = tier_transcripcion_fonetica
 		tier_words = tier_transcripcion_ortografica
 		phonetic_alphabet$ = transcripcion$
+		#printline 'phonetic_alphabet$'
 
 		#Creamos el TextGrid de silabas
+
+		select sound
 
 		duracion = Get duration
 		Create TextGrid... 0.0 duracion "Syllables"
@@ -404,7 +435,8 @@ endproc
 
 procedure TipoSonido etiqueta_sonido$ alphabet$
 
-# printline Etiqueta sonido: 'etiqueta_sonido$'
+#printline Etiqueta sonido: 'etiqueta_sonido$'
+#printline Alfabeto: 'alphabet$'
 
 if alphabet$ = "SAMPA"
 
@@ -416,7 +448,7 @@ if alphabet$ = "SAMPA"
 
 		#if etiqueta_sonido$ = "a_&quot" or etiqueta_sonido$ = "e_&quot" or etiqueta_sonido$ = "E_&quot" or etiqueta_sonido$ = "i_&quot" or etiqueta_sonido$ = "o_&quot" or etiqueta_sonido$ = "O_&quot" or etiqueta_sonido$ = "u_&quot" or etiqueta_sonido$ = "@_&quot" or etiqueta_sonido$ = "6_&quot" or etiqueta_sonido$ = "U_&quot" or etiqueta_sonido$ = "i~_&quot" or etiqueta_sonido$ = "e~_&quot" or etiqueta_sonido$ = "6~_&quot" or etiqueta_sonido$ = "o~_&quot" or etiqueta_sonido$ = "u~_&quot" or etiqueta_sonido$ = "I_&quot"
 
-		if etiqueta_sonido$ = "a_&quot" or etiqueta_sonido$ = "A_&quot" or etiqueta_sonido$ = "2_&quot" or etiqueta_sonido$ = "9_&quot" or etiqueta_sonido$ = "e_&quot" or etiqueta_sonido$ = "E_&quot" or etiqueta_sonido$ = "i_&quot" or etiqueta_sonido$ = "y_&quot" or etiqueta_sonido$ = "o_&quot" or etiqueta_sonido$ = "O_&quot" or etiqueta_sonido$ = "u_&quot" or etiqueta_sonido$ = "a~_&quot" or etiqueta_sonido$ = "9~_&quot" or etiqueta_sonido$ = "e~_&quot" or etiqueta_sonido$ = "o~_&quot" or etiqueta_sonido$ = "@_&quot"
+		if etiqueta_sonido$ = "a_&quot" or etiqueta_sonido$ = "A_&quot" or etiqueta_sonido$ = "2_&quot" or etiqueta_sonido$ = "9_&quot" or etiqueta_sonido$ = "e_&quot" or etiqueta_sonido$ = "E_&quot" or etiqueta_sonido$ = "i_&quot" or etiqueta_sonido$ = "y_&quot" or etiqueta_sonido$ = "o_&quot" or etiqueta_sonido$ = "O_&quot" or etiqueta_sonido$ = "u_&quot" or etiqueta_sonido$ = "a~_&quot" or etiqueta_sonido$ = "9~_&quot" or etiqueta_sonido$ = "e~_&quot" or etiqueta_sonido$ = "o~_&quot" or etiqueta_sonido$ = "@_&quot" or etiqueta_sonido$ = """a" or etiqueta_sonido$ = """A" or etiqueta_sonido$ = """2" or etiqueta_sonido$ = """9" or etiqueta_sonido$ = """e" or etiqueta_sonido$ = """E" or etiqueta_sonido$ = """i" or etiqueta_sonido$ = """y" or etiqueta_sonido$ = """o" or etiqueta_sonido$ = """O" or etiqueta_sonido$ = """u" or etiqueta_sonido$ = """a~" or etiqueta_sonido$ = """9~" or etiqueta_sonido$ = """e~" or etiqueta_sonido$ = """o~" or etiqueta_sonido$ = """@"
 
 			tipo_sonido$ = "VocalTonica"
 
@@ -521,6 +553,8 @@ procedure crea_tier_grupos_fonicos sound textgrid tier_syllables
 
 		#Creamos el TextGrid de grupos fonicos
 
+		select sound
+
 		duracion = Get duration
 		Create TextGrid... 0.0 duracion "IntonationGroups"
 		textgrid_grupos = selected ("TextGrid")
@@ -603,6 +637,8 @@ procedure crea_tier_grupos_entonativos sound textgrid tier_words tier_transcript
 		pitch = selected ("Pitch")
 
 		#Creamos el TextGrid de grupos entonativos
+
+		select sound
 
 		duracion = Get duration
 		Create TextGrid... 0.0 duracion "IntonationalPhrase"
@@ -1150,8 +1186,9 @@ endproc
 
 procedure crea_tier_grupos_acentuales sound textgrid tier_syllabes tier_intonation_units
 
-
 		#Creamos el TextGrid de grupos acentuales
+
+		select sound
 
 		duracion = Get duration
 		Create TextGrid... 0.0 duracion "StressGroups"
@@ -1162,6 +1199,7 @@ procedure crea_tier_grupos_acentuales sound textgrid tier_syllabes tier_intonati
 		select textgrid
 
 		num_intervalos = Get number of intervals... tier_syllables
+		#printline Num intervalos: 'num_intervalos'
 
 		grupo_inicial = 0
 		contador_grupos = 1
@@ -1191,6 +1229,8 @@ procedure crea_tier_grupos_acentuales sound textgrid tier_syllabes tier_intonati
 			#printline Tiempo final silaba: 'tiempo_final_silaba'
 
 			unidad_entonativa_silaba = Get interval at time... 'tier_intonation_units' tiempo_final_silaba
+
+			#printline 'unidad_entonativa_silaba'
 			tiempo_inicio_unidad_entonativa = Get start point... 'tier_intonation_units' unidad_entonativa_silaba
 			#printline Tiempo inicio unidad entonativa: 'tiempo_inicio_unidad_entonativa'
 
